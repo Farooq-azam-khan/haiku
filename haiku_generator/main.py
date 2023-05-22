@@ -2,15 +2,28 @@ from typing import Union
 from fastapi import FastAPI
 import random
 import openai
-
-from dotenv import load_dotenv 
+from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+import os
 
 load_dotenv()
-
+openai.api_key = os.getenv('CHATGPT_API_KEY')
+openai.api_base = os.getenv('CHATGPT_ENDPOINT')
+openai.api_type = 'azure'
+openai.api_version = '2023-05-15'
+DEPLOYMENT_NAME = os.getenv('CHATGPT_DEPLOYMENT_NAME')
 
 
 app = FastAPI()
+origins = [
+        'http://localhost:3000'
+]
 
+app.add_middleware(CORSMiddleware,
+                   allow_origins=origins,
+                   allow_credentials=True,
+                   allow_methods=['*'],
+                   allow_headers=['*'])
 
 @app.get('/')
 def home():
@@ -40,6 +53,7 @@ def haiku(topic: Union[str, None] = None):
     messages = message_history_init + [{'role': 'user',
                                         'content': f'Write a haiku about "{topic}"'
                                         }]
-    haiku = openai.ChatCompletion.create(model='gpt-3.5-turbo',
-                                        messages=messages)
+    haiku = openai.ChatCompletion.create(engine=DEPLOYMENT_NAME,
+                                         model='gpt-3.5-turbo',
+                                         messages=messages)
     return {'topic': topic, 'haiku': haiku['choices'][0]['message']['content']}
