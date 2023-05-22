@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "haiku-generator"
+version = "0.1.0"
+description = ""
+authors = ["farooq-azam-khan <khanazamfarooq99@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.95.2"
+uvicorn = {extras = ["standard"], version = "^0.22.0"}
+openai = "^0.27.7"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
