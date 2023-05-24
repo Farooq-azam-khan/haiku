@@ -166,6 +166,14 @@ optional = false
 python-versions = ">=3.5"
 
 [[package]]
+name = "joblib"
+version = "1.2.0"
+description = "Lightweight pipelining with Python functions"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[[package]]
 name = "more-itertools"
 version = "9.1.0"
 description = "More routines for operating on iterables, beyond itertools"
@@ -180,6 +188,28 @@ description = "multidict implementation"
 category = "main"
 optional = false
 python-versions = ">=3.7"
+
+[[package]]
+name = "nltk"
+version = "3.8.1"
+description = "Natural Language Toolkit"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+
+[package.dependencies]
+click = "*"
+joblib = "*"
+regex = ">=2021.8.3"
+tqdm = "*"
+
+[package.extras]
+all = ["scikit-learn", "python-crfsuite", "requests", "numpy", "pyparsing", "twython", "scipy", "matplotlib"]
+corenlp = ["requests"]
+machine_learning = ["numpy", "python-crfsuite", "scikit-learn", "scipy"]
+plot = ["matplotlib"]
+tgrep = ["pyparsing"]
+twitter = ["twython"]
 
 [[package]]
 name = "openai"
@@ -279,6 +309,14 @@ cli = ["click (>=5.0)"]
 name = "pyyaml"
 version = "6.0"
 description = "YAML parser and emitter for Python"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[[package]]
+name = "regex"
+version = "2023.5.5"
+description = "Alternative regular expression module, to replace re."
 category = "main"
 optional = false
 python-versions = ">=3.6"
@@ -439,7 +477,7 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "ee960bbdb897d64ed21304ec6716344826ca082aaa3eeca93163307c5e91692d"
+content-hash = "d839d74bac6a7f6e2aaa00b0250908b70f539d722f86d92361dfcafd876f6c77"
 
 [metadata.files]
 aiohttp = []
@@ -457,8 +495,10 @@ frozenlist = []
 h11 = []
 httptools = []
 idna = []
+joblib = []
 more-itertools = []
 multidict = []
+nltk = []
 openai = []
 packaging = []
 pluggy = []
@@ -467,6 +507,7 @@ pydantic = []
 pytest = []
 python-dotenv = []
 pyyaml = []
+regex = []
 requests = []
 sniffio = []
 starlette = []

@@ -18,7 +18,8 @@ import Html.Attributes exposing (wrap)
 type alias Model =
     { haiku : WebData Haiku, topic: Maybe String, key : Nav.Key }
 
-type alias Haiku = { topic: String, haiku: String} 
+type alias WordSyllable = List String
+type alias Haiku = { topic: String, haiku: String, syllabled_haiku: List (List  WordSyllable) } 
 
 type Msg
     = WriteHaiku
@@ -28,7 +29,11 @@ type Msg
     | ClickedLink Browser.UrlRequest
 
 decodeHaiku : Decoder Haiku 
-decodeHaiku = D.map2 Haiku (D.field "topic" D.string) (D.field "haiku" D.string)
+decodeHaiku = D.map3 
+                 Haiku 
+                    (D.field "topic" D.string) 
+                    (D.field "haiku" D.string)
+                    (D.field "syllabled_haiku" <|  D.list (D.list (D.list  D.string)) )
 
 get_haiku : Maybe String -> Cmd Msg 
 get_haiku topic = 
@@ -69,11 +74,17 @@ view model =
             ]
             [ div 
                 [ class "flex flex-col max-w-xl px-10 space-y-10" ] 
-                [ form [onSubmit WriteHaiku] [floating_input model.topic]
+                [ form [onSubmit WriteHaiku] [
+                    case model.haiku of 
+                        Loading -> input [] []
+                        NotAsked -> floating_input model.topic 
+                        Failure _ -> floating_input model.topic 
+                        Success _ -> floating_input model.topic
+                ]
                 , case model.haiku of 
                         NotAsked -> div [] []
-                        Loading -> div [] [text "loading..."]
-                        Failure _ -> div [] [ text "failure fetching haiku."]
+                        Loading -> div [class "text-gray-100"] [text "loading..."]
+                        Failure _ -> div [class "text-gray-100"] [ text "failure fetching haiku."]
                         Success haiku -> 
                                 div [class "text-gray-100"]
                                     [ div 
@@ -84,16 +95,21 @@ view model =
                                     ]]
                                     , div 
                                         [class "mt-5 text-xl font-normal space-y-1"]
-                                        (List.map (\h -> p [] [text h]) (String.split "\n" haiku.haiku))
+                                        [render_syllable_haiku haiku.syllabled_haiku] 
                                     ]
-
                 ]
                 
             ]
         ]
     }
 
-
+render_syllable_haiku syllabled_haiku =
+    div [] (List.map (\line -> div [class "flex space-x-20 justify-between"] [div [] (
+        List.map (\word -> span [] [text <| (String.join "-" word) ++ " " ] ) line 
+        ), div [] [text <| "(" ++ (String.fromInt <| List.foldl (\word acc -> acc + List.length word) 0 line )++ ")" ]
+        ]
+        ) syllabled_haiku )
+    
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
