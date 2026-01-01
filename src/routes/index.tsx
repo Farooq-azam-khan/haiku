@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useState } from 'react'
-import { Sparkles } from 'lucide-react'
+import { Sparkles, Terminal } from 'lucide-react'
 
 export const Route = createFileRoute('/')({ component: App })
 
@@ -32,6 +32,38 @@ const haikus = [
   }
 ]
 
+// Reusable Neobrutalist Card Component
+function NeoCard({ children, className = "" }: { children: React.ReactNode, className?: string }) {
+  return (
+    <div className={`bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-md ${className}`}>
+      {children}
+    </div>
+  )
+}
+
+// Reusable Neobrutalist Button Component
+function NeoButton({ onClick, children, className = "" }: { onClick?: () => void, children: React.ReactNode, className?: string }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`
+        px-6 py-3 font-bold text-black bg-pink-400 
+        border-2 border-black rounded-md 
+        shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] 
+        hover:translate-x-[2px] hover:translate-y-[2px] 
+        hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] 
+        active:translate-x-[4px] active:translate-y-[4px] 
+        active:shadow-none 
+        transition-all duration-200 
+        flex items-center gap-2 justify-center
+        ${className}
+      `}
+    >
+      {children}
+    </button>
+  )
+}
+
 function App() {
   const [currentHaiku, setCurrentHaiku] = useState<typeof haikus[0] | null>(null)
 
@@ -41,48 +73,63 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 flex flex-col items-center justify-center p-6 text-center">
-      <div className="max-w-2xl w-full">
-        <div className="mb-12">
-          <h1 className="text-5xl md:text-7xl font-black text-white mb-4 tracking-tight">
-            <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-              Haiku
-            </span>{' '}
-            Generator
-          </h1>
-          <p className="text-xl text-gray-400 font-light">
-            Find serenity in code and poetry.
-          </p>
+    <div className="min-h-screen bg-yellow-50 font-sans text-black flex flex-col items-center justify-center p-6">
+      
+      {/* Header Section */}
+      <div className="max-w-xl w-full mb-12 text-center">
+        <div className="inline-block mb-4 p-3 bg-blue-300 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] rounded-full">
+           <Terminal className="w-8 h-8 text-black" />
         </div>
+        <h1 className="text-5xl md:text-6xl font-black mb-2 uppercase tracking-tighter">
+          Haiku_Gen_v1
+        </h1>
+        <p className="text-xl font-bold text-gray-700">
+          // Digital Poetry Generator
+        </p>
+      </div>
 
-        <div className="min-h-[200px] mb-12 flex items-center justify-center">
+      {/* Main Content Area */}
+      <div className="max-w-xl w-full">
+        <NeoCard className="p-8 mb-8 min-h-[240px] flex items-center justify-center">
           {currentHaiku ? (
-            <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-8 shadow-xl shadow-cyan-500/10 animate-in fade-in zoom-in duration-500">
-              <p className="text-2xl md:text-3xl text-gray-200 font-serif italic leading-relaxed mb-2">
-                {currentHaiku.line1}
+            <div className="text-center space-y-4 animate-in fade-in zoom-in duration-300">
+              <p className="text-3xl font-bold italic leading-tight bg-yellow-200 inline-block px-1 border border-black rotate-[-1deg]">
+                "{currentHaiku.line1}"
               </p>
-              <p className="text-2xl md:text-3xl text-gray-200 font-serif italic leading-relaxed mb-2">
-                {currentHaiku.line2}
+              <br />
+              <p className="text-3xl font-bold italic leading-tight bg-green-200 inline-block px-1 border border-black rotate-[1deg]">
+                "{currentHaiku.line2}"
               </p>
-              <p className="text-2xl md:text-3xl text-gray-200 font-serif italic leading-relaxed">
-                {currentHaiku.line3}
+              <br />
+              <p className="text-3xl font-bold italic leading-tight bg-cyan-200 inline-block px-1 border border-black rotate-[-1deg]">
+                "{currentHaiku.line3}"
               </p>
             </div>
           ) : (
-            <div className="text-gray-600 italic text-lg">
-              Press the button to reveal a poem...
-            </div>
+             <div className="text-center">
+                <p className="text-2xl font-bold text-gray-400 uppercase tracking-widest">
+                  Ready to Generate
+                </p>
+                <div className="mt-4 flex gap-2 justify-center">
+                   <div className="w-3 h-3 bg-black rounded-full animate-bounce delay-0"></div>
+                   <div className="w-3 h-3 bg-black rounded-full animate-bounce delay-100"></div>
+                   <div className="w-3 h-3 bg-black rounded-full animate-bounce delay-200"></div>
+                </div>
+             </div>
           )}
-        </div>
+        </NeoCard>
 
-        <button
-          onClick={generateHaiku}
-          className="group relative inline-flex items-center gap-3 px-8 py-4 bg-cyan-500 hover:bg-cyan-600 text-white text-lg font-semibold rounded-full transition-all duration-300 shadow-lg shadow-cyan-500/30 hover:shadow-cyan-500/50 hover:-translate-y-1 active:translate-y-0"
-        >
-          <Sparkles className="w-5 h-5 transition-transform group-hover:rotate-12" />
-          Generate Haiku
-        </button>
+        <div className="flex justify-center">
+          <NeoButton onClick={generateHaiku} className="w-full md:w-auto text-lg">
+            <Sparkles className="w-6 h-6" />
+            GENERATE_NEW_HAIKU
+          </NeoButton>
+        </div>
       </div>
+      
+      {/* Footer Decoration */}
+      <div className="fixed bottom-0 left-0 w-full h-4 bg-black"></div>
+      <div className="fixed top-0 right-0 w-4 h-full bg-black"></div>
     </div>
   )
 }
