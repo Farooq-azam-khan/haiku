@@ -84,6 +84,7 @@ function NeoButton({
   return (
     <button
       onClick={onClick}
+      type="button"
       className={`
         px-4 py-2 font-bold text-black ${bgColors[variant]}
         border-2 border-black rounded-md
@@ -120,7 +121,7 @@ function TypewriterText({
   useEffect(() => {
     setDisplayedText("");
     setStarted(false);
-  }, [text]);
+  }, []);
 
   // Start delay timer
   useEffect(() => {
@@ -128,7 +129,7 @@ function TypewriterText({
       const timer = setTimeout(() => setStarted(true), startDelay);
       return () => clearTimeout(timer);
     }
-  }, [startDelay, text, started]);
+  }, [startDelay, started]);
 
   // Typing effect
   useEffect(() => {
@@ -265,6 +266,7 @@ function App() {
           {currentHaiku && (
             <div className="absolute bottom-4 right-4 flex gap-2">
               <button
+                type="button"
                 onClick={handleCopy}
                 className="p-2 bg-white border-2 border-black hover:bg-gray-100 active:translate-y-1 transition-all"
                 title="Copy to Clipboard"
@@ -326,6 +328,7 @@ function App() {
           <div className="flex justify-between items-center mb-6 pb-4 border-b-4 border-black border-dashed">
             <h2 className="text-3xl font-black uppercase">Session_Logs</h2>
             <button
+              type="button"
               onClick={() => setShowLogs(false)}
               className="p-2 hover:bg-red-100 rounded-full border-2 border-transparent hover:border-black transition-all"
             >
