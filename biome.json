@@ -1,12 +1,12 @@
 {
-  "css": {
-    "parser": {
-      "cssModules": false,
-      "allowWrongLineComments": false,
-      "tailwindDirectives": true
-    }
-  },
-  "files": {
-    "includes": ["src/**/*.{ts|js|jsx|tsx}", "!src/routeTree.gen.ts"]
-  }
+	"css": {
+		"parser": {
+			"cssModules": false,
+			"allowWrongLineComments": false,
+			"tailwindDirectives": true
+		}
+	},
+	"files": {
+		"includes": ["src/**/*.{ts|js|jsx|tsx}", "!src/routeTree.gen.ts"]
+	}
 }
